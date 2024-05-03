@@ -3,44 +3,67 @@
 '''
 
 from datetime import date,timedelta
-from fastapi import FastAPI,BackgroundTasks
 from apscheduler.schedulers.background import BackgroundScheduler as scheduler
-import requests
 import pandas as pd
-from .Caller import Caller
+import time
 
+from .Caller import Caller
 from ..Database.updatedb import UpdateDatabase
+from ...TrainPipelines.Constant import Constant
 
 
 class Scheduler:
     def __init__(self):
-        self.df =  pd.DataFrame()
-        self.sentimentPayload  =  None
+        self.df = pd.DataFrame()
+        self.sentimentPayload = None
         self.start = date.today() - timedelta(days=1)
         self.end = date.today() - timedelta(days=1)
 
 
     def scheduleUpdate(self):
-        params       = {
+        params = {
             'start':self.start,
             'end':self.end,
         }
         api_endpoint = "http://127.0.0.1:8000/get_comments"
 
-
         sch = scheduler()
-        caller = Caller(api_endpoint=api_endpoint,params=params)
-        sch.add_job(caller.update,trigger='cron',hour=10,  minute=38)
+        caller = Caller(api_endpoint=api_endpoint, params=params)
+        sch.add_job(caller.update, trigger='cron', hour=15, minute=34)
         sch.start()
 
         try:
             print('Scheduler started, ctrl+c to exit!')
-            while 1:
-                pass
+            while True:
+                time.sleep(Constant.UPDATE_PROCESS_SLEEPTIME)
         except KeyboardInterrupt:
             if sch.state:
                 sch.shutdown()
-        sch.add_job(func=caller.update)
+        except OverflowError:
+            print("Overflow error")
+
+
+
+
+
+
+
+
+# # Calculate the time until the next execution
+#         now = datetime.now()
+#         time_until_next_execution = next_execution_time - now
+
+#         # Sleep until the next execution time
+#         sleep_time = time_until_next_execution.total_seconds()
+#         if sleep_time > 0:
+#             print(f"Sleeping for {sleep_time} seconds until the next execution...")
+#             time.sleep(sleep_time)
+
+#         # Update the next execution time for the next day
+#         next_execution_time += timedelta(days=1)
+
+#         # Execute the task
+#         my_task()
 
 
 
@@ -81,11 +104,3 @@ class Scheduler:
 #         except requests.exceptions.RequestException as e:
 #             print("Error fetching data:", e)
 #             return None
-        
-
-
-
-
-
-
-

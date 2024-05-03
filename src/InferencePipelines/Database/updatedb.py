@@ -53,7 +53,7 @@ class UpdateDatabase:
         sentiment['encoded_sentiment'] = sentiment.sentiment.map(encoder_map)
         sentiment = sentiment.drop(['sentiment'],axis=1)
 
-        '''Here  I am going to get the mean of all sentiment values'''
+        '''get the mean of all sentiment values'''
         grouped_data    = sentiment.groupby('Account').agg({
         'encoded_sentiment': 'mean',
         }).reset_index()

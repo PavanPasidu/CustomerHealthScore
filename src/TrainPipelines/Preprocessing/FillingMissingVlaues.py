@@ -21,7 +21,7 @@ class FillingMissingValues:
             elif len(mode_values)>=3 and col!='encoded_product_impact':
                 group[col] = group[col].fillna(mode_values.median())
             else:
-                if col!='encoded_product_impact':
+                if col != 'encoded_product_impact':
                     group[col] = group[col].fillna(median_values)   
         return group
 
@@ -37,8 +37,6 @@ class FillingMissingValues:
             else:
                 return 1 if boolean_value else 0
         temp_df['First Contact Resolution'] = temp_df['First Contact Resolution'].map(custom_encode)
-
-
         X_missing = temp_df[temp_df['First Contact Resolution'].isnull()][['Time To Resolve']]
         predicted_values = model.predict(X_missing)
 
@@ -52,4 +50,4 @@ class FillingMissingValues:
         filledCaseDataset = pd.DataFrame()#self.fill_missing_fcr()
         filled_df = self.df.groupby('Account Name').apply(self.fill_missing).reset_index(drop=True)
         filled_df = filled_df.fillna(-1)
-        return filled_df,filledCaseDataset
+        return filled_df, filledCaseDataset

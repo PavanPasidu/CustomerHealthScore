@@ -1,6 +1,6 @@
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 import requests
 import os
-from fastapi import FastAPI, HTTPException, BackgroundTasks
 import json
 
 from ..Constant import Constant as cons
@@ -11,13 +11,13 @@ from .Auth import Auth
 class GetServicenowData(Auth):
     def __init__(self,url,const):
         super().__init__(url,const)
-        self.url                =   url
+        self.url = url
            
 
     '''Get payload from servicenow'''
     def getJSONpayload(self,url,const):
-        headers         = {'Content-Type': 'application/x-www-form-urlencoded'}
-        FILE_PATH       = './Tokens/accessTokens.json'
+        headers   = {'Content-Type': 'application/x-www-form-urlencoded'}
+        FILE_PATH = './Tokens/accessTokens.json'
 
         # Get the access token
         with open(FILE_PATH,'w+') as js:
@@ -25,11 +25,11 @@ class GetServicenowData(Auth):
                 CREDENTIALS = json.load(js)
             except json.decoder.JSONDecodeError as je:
                 pass
-        empty               = (os.stat(FILE_PATH).st_size == 0)
+        empty = (os.stat(FILE_PATH).st_size == 0)
         if empty:
-            accessToken     =   super().getAccessToken(const=const)
+            accessToken = super().getAccessToken(const=const)
         else:
-            accessToken     =   CREDENTIALS.get('ACCESS_TOKEN')
+            accessToken = CREDENTIALS.get('ACCESS_TOKEN')
 
 
         headers = {
@@ -41,7 +41,7 @@ class GetServicenowData(Auth):
             'startDate':'2022-02-01',
             'endDate':'2022-08-01'
         }
-        response = requests.get(url, headers=headers,params=params)
+        response = requests.get(url, headers=headers, params=params)
 
         # Check if request was successful (status code 200)
         if response.status_code == 200:

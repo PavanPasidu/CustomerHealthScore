@@ -10,18 +10,18 @@ class Caller:
 
     def convert_to_df(self,payload):
         lists = []
-        if len(payload)  == 0:
+        if len(payload) == 0:
             df = pd.DataFrame(columns=['Account','sentiment'])
         else:
             for lis in payload:
                 lists.append(lis[::len(lis)-1])
-            df = pd.DataFrame(data=lists,columns=['Account','sentiment'])
+            df = pd.DataFrame(data=lists, columns=['Account','sentiment'])
         return df
 
 
     def getPayload(self):
         try:
-            response = requests.get(self.api_endpoint,params=self.params)
+            response = requests.get(self.api_endpoint, params=self.params)
             response.raise_for_status()  
             sentimentPayload = response.json()
             return sentimentPayload

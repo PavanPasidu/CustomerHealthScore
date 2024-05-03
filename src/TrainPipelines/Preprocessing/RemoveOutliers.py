@@ -6,6 +6,7 @@ class RemoveOutliers:
     def filter_records(self,group):
         mode = group['likely_to_recomend'].mode()
         median = group['likely_to_recomend'].median()
+        
         if len(mode) == 1:  
             group['diff_to_mode'] = abs(group['likely_to_recomend'] - mode[0])
             return group[group['diff_to_mode'] <= 5]

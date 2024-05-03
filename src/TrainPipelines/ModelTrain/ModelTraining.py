@@ -11,20 +11,18 @@ import warnings
 
 class ModelTraining:
     # Split the dataset
-    X,y      = None,None
+    X,y = None, None
     X_train = X_test = y_train =  y_test = None
 
     def __init__(self,df):
-        self.df     =   df
+        self.df = df
 
 
     def modelSelection(self):
         global X,y,X_train, X_test, y_train, y_test
 
-        # suffle the dataset
         X = self.df.drop(['healthScore','AccountName'],axis=1)
         y = self.df[['healthScore']]
-        X, y = shuffle(X, y, random_state=42)
 
         # Split the dataset
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -41,7 +39,7 @@ class ModelTraining:
         }
 
         mse_values        = dict()
-        lowest_mse        = 2000
+        lowest_mse        = 20000
         lowest_mse_model  = None
         best_model_name   = 'Linear Regression'
         for model_name, model in models.items():
@@ -69,7 +67,7 @@ class ModelTraining:
 
         if best_model_name == "Linear Regression":
             param_grid = {
-                # Define hyperparameters grid for Linear Regression if needed
+                
             }
         elif best_model_name == "Ridge Regression":
             param_grid = {
@@ -149,4 +147,5 @@ class ModelTraining:
         y_pred = best_model_with_tunedParams.predict(X_test)
         mse = mean_squared_error(y_test, y_pred)
         print('M.S.E. of the new model: ',mse)
+        print('Model: ',modelName, "\nBest Params: ",tunedParams)
         return best_model_with_tunedParams,mse

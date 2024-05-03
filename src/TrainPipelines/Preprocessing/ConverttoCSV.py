@@ -5,17 +5,18 @@ import pandas as pd
 
 class ConverttoCSV:
     def __init__(self,constant,servicenow):
-        self.servicenow     =   servicenow
-        self.constant       =   constant
+        self.servicenow = servicenow
+        self.constant   = constant
 
     def getData(self):
-        caseData    =   self.servicenow.getJSONpayload(const=self.constant,url='https://wso2sndev.service-now.com/api/wso2/customer_health/get_ticket_history')
-        accountData =   self.servicenow.getJSONpayload(const=self.constant,url='https://wso2sndev.service-now.com/api/wso2/customer_health/get_product_details')
+        caseData    = self.servicenow.getJSONpayload(const=self.constant,
+                                                     url='https://wso2sndev.service-now.com/api/wso2/customer_health/get_ticket_history')
+        accountData = self.servicenow.getJSONpayload(const=self.constant,
+                                                     url='https://wso2sndev.service-now.com/api/wso2/customer_health/get_product_details')
 
         # convert data into csv format
-        caseDatapath    =   self.convertData(caseData,special=True)
-        accountDatapath =   self.convertData(accountData,special=False)
-
+        caseDatapath    = self.convertData(caseData,special=True)
+        accountDatapath = self.convertData(accountData,special=False)
         return caseDatapath,accountDatapath
     
 
@@ -40,6 +41,5 @@ class ConverttoCSV:
         else:
             rows = dataField
 
-        # Create DataFrame
         df = pd.DataFrame(rows, columns=header_fields)
         return df

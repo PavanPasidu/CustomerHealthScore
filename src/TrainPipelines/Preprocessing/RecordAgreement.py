@@ -34,9 +34,9 @@ class RecordAgreement:
 
     # Function to get Kippendorff Alpha Values
     def getKippendroffAlphaValues(self):
-        Krippendorff_dic    = dict()                           # dictionary to store Krippendorff's alpha values
-        index               = 2022
-        encoded_surveys     = self.getencodedSURVEYS(self.df)    # get the encoded surveys        
+        Krippendorff_dic = dict()                           # dictionary to store Krippendorff's alpha values
+        index            = 2022
+        encoded_surveys  = self.getencodedSURVEYS(self.df)    # get the encoded surveys        
 
         for survey in encoded_surveys:                                                                         # add survey no as key
             accs                = survey['Account Name']
@@ -45,30 +45,30 @@ class RecordAgreement:
             
             
             for account in set(duplicated_acc_list):
-                df = survey[(survey['Account Name']==account)][['likely_to_recomend','encoded_satisfaction','encoded_responsiveness']]
+                df = survey[(survey['Account Name'] == account)][['likely_to_recomend','encoded_satisfaction','encoded_responsiveness']]
                 df = df.fillna(-1)
-
-                if len(df)==0:continue
+                if len(df) == 0:
+                    continue
                 table               = df.values.tolist()
                 Krippendorff        = kd.alpha(table,level_of_measurement='ordinal')          # calculating Krippendorff's alpha
                 temp_dic[account]   = Krippendorff                                            # add Krippendorff to tempary dict
             
             Krippendorff_dic[index] = temp_dic                                                # assign Krippendorff alpha of accounts in each survey
-            index+=1 
-        return Krippendorff_dic,encoded_surveys  
+            index+= 1 
+        return Krippendorff_dic, encoded_surveys  
     
     
     # Function to get records with high agreement levels                                
     def gethighAgreementSurveys(self):
-
         Krippendorff_dic,encoded_surveys = self.getKippendroffAlphaValues()
 
         keys = Krippendorff_dic.keys()
         high_agreement_surveys = []
         for key,survey in zip(keys,encoded_surveys):
-            k_values        = Krippendorff_dic[key].values()       # getting Krippendorff alpha values of each multi responses
-            k_account       =    Krippendorff_dic[key].keys()     # getting country of each multi responses
-            for k,acc in zip(k_values,k_account):
+            k_values  = Krippendorff_dic[key].values()   # getting Krippendorff alpha values of each multi responses
+            k_account = Krippendorff_dic[key].keys()     # getting country of each multi responses
+            
+            for k,acc in zip(k_values, k_account):
                 if k<0.6:
                     duplicates = survey[(survey['Account Name']==acc)]
                     survey = survey.drop(survey[(survey['Account Name']==acc)].index)           # drop low agreement response

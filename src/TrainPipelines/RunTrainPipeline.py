@@ -4,11 +4,10 @@ class Runner:
     def __init__(self):
         self.trainer = Train()
 
-    def getCurrentMSE(self,new_mse):
+    def getCurrentMSE(self, new_mse):
         constant = 100
         with open('./Models/current_mse.txt','+r') as file:
             exist = len(file.read(1))
-
             if exist<1:
                 file.write(str(new_mse))
                 return new_mse*constant
@@ -16,9 +15,8 @@ class Runner:
                 file.seek(0)
                 current_mse = float(file.read())
                 return current_mse
-            
-            
-    def saveModel(self,model,mse):
+                      
+    def saveModel(self, model, mse):
         trainer = self.trainer
         current_mse = self.getCurrentMSE(mse)
         print('Current M.S.E. : ',current_mse)
@@ -38,10 +36,11 @@ class Runner:
         noduplicateDF = trainer.Preprocessing.dropingDuplicates(encodedNPS)
         highConcensusDF = trainer.Preprocessing.getAgrrement(noduplicateDF)
         noOutliersDF = trainer.Preprocessing.removeOutliers(highConcensusDF)
-        filledNPS,filledCases = trainer.Preprocessing.fillingMissingValues(noOutliersDF,caseData)
+        filledNPS,filledCases = trainer.Preprocessing.fillingMissingValues(noOutliersDF, caseData)
         labeledDF = trainer.Preprocessing.labeling(filledNPS)
 
-        mergedDF = trainer.Merger.mergeDataset(True,labeledDF,caseData,accountData)
+        mergedDF = trainer.Merger.mergeDataset(True, labeledDF, caseData, accountData)
+        trainer.Servicenow.pushData(mergedDF)
 
         model,mse = trainer.Model.trainModel(mergedDF)
-        self.saveModel(model=model,mse=mse)
+        self.saveModel(model=model, mse=mse)

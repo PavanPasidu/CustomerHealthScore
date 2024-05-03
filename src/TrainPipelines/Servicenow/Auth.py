@@ -15,8 +15,6 @@ class Auth:
         self.client_id          =   const.CLIENT_ID
         self.client_secret      =   const.CLIENT_SECRET
         
-
-
     def saveAccessToken(self,creds,credential_path):    
         with open(credential_path) as f:
             try:
@@ -30,7 +28,6 @@ class Auth:
             data.update({'ACCESS_TOKEN':creds['ACCESS_TOKEN'],'REFRESH_TOKEN':creds['REFRESH_TOKEN']})
         with open(credential_path, 'w') as f:
             json.dump(data, f)
-
 
     def getAccessToken(self,const):
         FILE_PATH   = 'E:/Research/CHS_Repo/CustomerHealthScoreB2B/Tokens/accessTokens.json'
@@ -64,7 +61,7 @@ class Auth:
             exit()
 
         data         = response.json()
-        accessToken  =   data.get('access_token')
+        accessToken  = data.get('access_token')
 
         # Save the access token, refresh token
         try:
