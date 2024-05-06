@@ -16,8 +16,8 @@ class Scheduler:
     def __init__(self):
         self.df = pd.DataFrame()
         self.sentimentPayload = None
-        self.start = date.today() - timedelta(days=1)
-        self.end = date.today() - timedelta(days=1)
+        self.start ="2024-03-19"# date.today() - timedelta(days=1)
+        self.end = "2024-03-19"#date.today() - timedelta(days=1)
 
 
     def scheduleUpdate(self):
@@ -29,7 +29,7 @@ class Scheduler:
 
         sch = scheduler()
         caller = Caller(api_endpoint=api_endpoint, params=params)
-        sch.add_job(caller.update, trigger='cron', hour=15, minute=34)
+        sch.add_job(caller.update, trigger='cron', hour=9, minute=54)
         sch.start()
 
         try:

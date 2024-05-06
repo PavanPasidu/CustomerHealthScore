@@ -1,5 +1,5 @@
 from .dbconnect import DatabaseConnection
-from ...TrainPipelines.Constant import Constant as cons
+from src.TrainPipelines.Constant import Constant as cons
 from .createdb import CreateDB
 
 

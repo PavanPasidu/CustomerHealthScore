@@ -25,7 +25,7 @@ class UpdateDatabase:
                                                password=cons.DATABASE_PASSWORD)
 
         # Retrieve healthscore values from source database
-        FETCH = "SELECT AccountName, HealthScore FROM healthscore.customerhealthscore"
+        FETCH = f"SELECT AccountName, HealthScore FROM {cons.DATABASE_NAME}.customerhealthscore"
         source_data = source_connection.query(FETCH)
 
         healthscoreDF = self.convert(source_data)

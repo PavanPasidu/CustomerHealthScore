@@ -111,3 +111,7 @@ Werkzeug==3.0.1
 xgboost==2.0.3
 yellowbrick==1.5
 zipp==3.17.0
+krippendorff==0.6.1
+mysql-connector-python==8.4.0
+fastapi==0.111.0
+apscheduler==3.10.4
